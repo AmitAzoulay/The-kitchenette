@@ -8,7 +8,7 @@ async function login(email, password) {
         if(!existingUser) {
             throw new Error("User not found")
         }
-        const isPasswordValid = bcrypt.compare(password, existingUser.password)
+        const isPasswordValid = await bcrypt.compare(password, existingUser.password)
         if(!isPasswordValid) {
             throw new Error("Incorrect password")
         }
