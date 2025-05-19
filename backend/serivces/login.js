@@ -13,7 +13,7 @@ async function login(email, password) {
         if (!isPasswordValid) {
             throw new Error("Incorrect password")
         }
-        return generateToken(existingUser)
+        return { token: generateToken(existingUser), role: existingUser.role }
     } catch (err) {
         throw new Error("Invalid creds")
     }

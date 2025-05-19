@@ -3,8 +3,8 @@ const authService = require("../serivces/login")
 async function login(req, res) {
     try {
         const { email, password } = req.body
-        const token = await authService.login(email, password)
-        res.json({ token: token })
+        const { token, role } = await authService.login(email, password)
+        res.json({ token: token, role: role })
     } catch (err) {
         console.log(err)
         res.status(401).json({ message: "Invalid creds" })
