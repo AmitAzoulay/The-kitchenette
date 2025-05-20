@@ -1,43 +1,64 @@
-import { React } from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import io from 'socket.io-client';
+const socket = io('http://localhost:4000'); 
 
-const Dashboard = () => {
-
-  const token = localStorage.getItem("token")
-  const [user, setUsers] = useState([])
-  const navigate = useNavigate()
+const Chat = () => {
+  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    if (!token) {
-      navigate("/login")
-    }
-    const fetchUsers = async (e) => {
-      try {
-        const response = await fetch("http://localhost:4000/api/users", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        if (response.ok) {
-          const result = await response.json()
-          setUsers(result)
-        } else {
-          navigate("/login")
-        }
-      } catch (err) {
-        console.log(err)
-        navigate("/login")
-      }
-    }
-    fetchUsers()
-  }, [token, navigate])
+    socket.on('message', (data) => {
+      setMessages((prevMessages) => [...prevMessages, data]);
+    });
 
+    return () => {
+      socket.off('message');
+    };
+  }, []);
+
+  const sendMessage = (e) => {
+    e.preventDefault();
+    if (message.trim()) {
+      const chatMessage = {
+        text: message,
+        timestamp: new Date().toISOString(),
+        user: 'Anonymous',
+      };
+      socket.emit('chatMessage', chatMessage);
+      setMessage('');
+    }
+  };
 
   return (
-    <div>Dashboard Page</div>
+    <div className="container mt-4">
+      <div className="card">
+        <div className="card-header bg-primary text-white">
+          <h5 className="mb-0">Chat Room</h5>
+        </div>
+        <div className="card-body" style={{ height: '300px', overflowY: 'scroll' }}>
+          {messages.map((msg, index) => (
+            <div key={index} className="mb-2">
+              <strong>{msg.user}:</strong> {msg.text}
+              <div className="text-muted small">{new Date(msg.timestamp).toLocaleTimeString()}</div>
+            </div>
+          ))}
+        </div>
+        <div className="card-footer">
+          <form onSubmit={sendMessage} className="d-flex">
+            <input
+              type="text"
+              className="form-control me-2"
+              placeholder="Type a message..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <button type="submit" className="btn btn-primary">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default Dashboard;
+export default Chat
+
