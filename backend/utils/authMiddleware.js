@@ -1,24 +1,20 @@
 const jwt = require("jsonwebtoken")
 const { secretKey } = require("../configuration/jwtConfig")
-
+const User = require("../models/user")
 
 async function authenticateToken(req, res, next) {
-    const authHeader = req.header("Authorization")
-    if (!authHeader) {
-        return res.status(401).json({ message: "Unauthorized: missing token" })
+    const token = req.cookies.token
+    if (!token) {
+        return res.json({ status: false })
     }
-    const bearer = authHeader.split(" ")[0]
-    const token = authHeader.split(" ")[1]
-    //console.log(authHeader, bearer, token)
-    if (bearer !== "Bearer" || !token) {
-        return res.status(401).json({ message: "Unauthorized: invalid token format" })
-    }
-    jwt.verify(token, secretKey, (err, user) => {
+    jwt.verify(token, secretKey, async (err, data) => {
         if (err) {
-            return res.status(401).json({ message: "Forbidden: invalid token" })
+            return res.json({ status: false })
+        } else {
+            const user = await User.findById(data.id)
+            if (user) return res.json({ status: true, user: user.username })
+            else return res.json({ status: false })
         }
-        req.user = user
-        next()
     })
 }
 function verifyToken(token) {

@@ -4,7 +4,15 @@ async function login(req, res) {
     try {
         const { email, password } = req.body
         const { token, role } = await authService.login(email, password)
-        res.json({ token: token, role: role })
+        res.cookie("token", token, {
+            withCredentials: true,
+            httpOnly: false,
+        });
+        res.cookie("role", role, {
+            withCredentials: true,
+            httpOnly: false,
+        });
+        res.status(201).json({ message: "User logged in successfully", success: true, token: token, role: role });
     } catch (err) {
         console.log(err)
         res.status(401).json({ message: "Invalid creds" })

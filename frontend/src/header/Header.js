@@ -1,27 +1,28 @@
 import React from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom';
-
+import { useCookies } from "react-cookie";
 
 const Header = () => {
-    const token = localStorage.getItem("token")
-    const role = localStorage.getItem("role")
+    const [cookies, setCookie, removeCookie] = useCookies(['token', 'role']);
+    console.log("jjjjjjjjj")
+    console.log(cookies)
     const navigate = useNavigate()
 
     const handleLogout = async (e) => {
         e.preventDefault();
-        localStorage.removeItem("token")
-        localStorage.removeItem("role")
+        removeCookie("token")
+        removeCookie("role")
         navigate("/login")
     }
     return (
-        <Navbar bg={token ? "primary" : "dark"} variant="dark">
+        <Navbar bg={cookies.token ? "primary" : "dark"} variant="dark">
             <Container>
                 <Navbar.Brand as={Link} to="" >
-                    {token ? "Loggen-in" : "Not-Loggedin"}
+                    {cookies.token ? "Loggen-in" : "Not-Loggedin"}
                 </Navbar.Brand>
                 <Nav className="me-auto">
-                    {token ? (
+                    {cookies.token ? (
                         <>
                             <Nav.Link as={Link} to="/dashboard" className='nav-link'>dashboard</Nav.Link>
                             <Nav.Link as={Link} onClick={handleLogout} className='nav-link'>logout</Nav.Link>
@@ -32,7 +33,7 @@ const Header = () => {
                             <Nav.Link as={Link} to="/login" className='nav-link'> Login</Nav.Link>
                         </>
                     )}
-                    {role === 'admin' ? (
+                    {cookies.role === 'admin' ? (
                         <>
                             <Nav.Link as={Link} to="/admin" className='nav-link'> Admin</Nav.Link>
                         </>

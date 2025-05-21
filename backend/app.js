@@ -5,6 +5,7 @@ const signupRoute = require("./routes/signup")
 const loginRoute = require("./routes/login")
 const userRoute = require("./routes/user")
 const bodyParser = require("body-parser")
+const CookieParser = require("cookie-parser")
 const cors = require("cors")
 const http = require("http");
 const createAdminAccount = require("./scripts/admin")
@@ -29,11 +30,12 @@ const server = app.listen(process.env.PORT, () => {
 });
 
 const io = require('socket.io')(server, {
-  cors: {
-    origin: 'http://localhost:3000',  // Your React frontend URL
-    methods: ['GET', 'POST']
-  }
+    cors: {
+        origin: 'http://localhost:3000',  // Your React frontend URL
+        methods: ['GET', 'POST']
+    }
 });
+app.use(CookieParser());
 
 io.on('connection', (socket) => {
     console.log('A user connected');

@@ -3,9 +3,10 @@ import { Button, Form, FormControl } from 'react-bootstrap'
 import "./Login.css"
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { useCookies } from 'react-cookie';
 
 const Login = () => {
+    const [cookies, setCookie, removeCookie] = useCookies(['token', 'role']);
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
         email: '',
@@ -26,7 +27,8 @@ const Login = () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
+                withCredentials: "included",
             })
             const result = await response.json()
             console.log(result)
@@ -34,8 +36,8 @@ const Login = () => {
                 alert("Invalid creds... Try again")
             }
             else {
-                localStorage.setItem("token", result.token)
-                localStorage.setItem("role", result.role)
+                setCookie("token", result.token);
+                setCookie("role", result.role);
                 navigate("/dashboard")
             }
         } catch (err) {

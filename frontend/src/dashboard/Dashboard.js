@@ -1,12 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-const socket = io('http://localhost:4000'); 
+import { useNavigate } from 'react-router-dom';
+import { useCookies } from "react-cookie";
+const socket = io('http://localhost:4000');
 
 const Chat = () => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [cookies, setCookie, removeCookie] = useCookies(['token', 'role']);
+  const [user, setUsers] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
+
+    console.log(cookies)
+    if (!cookies.token) {
+      navigate("/login")
+    }
+
+
     socket.on('message', (data) => {
       setMessages((prevMessages) => [...prevMessages, data]);
     });
@@ -14,7 +26,7 @@ const Chat = () => {
     return () => {
       socket.off('message');
     };
-  }, []);
+  }, [[cookies.token, navigate]]);
 
   const sendMessage = (e) => {
     e.preventDefault();
