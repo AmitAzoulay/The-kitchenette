@@ -5,8 +5,6 @@ import { useCookies } from "react-cookie";
 
 const Header = () => {
     const [cookies, setCookie, removeCookie] = useCookies(['token', 'role']);
-    console.log("jjjjjjjjj")
-    console.log(cookies)
     const navigate = useNavigate()
 
     const handleLogout = async (e) => {
