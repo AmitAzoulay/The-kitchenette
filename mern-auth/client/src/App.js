@@ -1,13 +1,16 @@
 
-import Register from "./components/auth/Register";
-import { Routes, Route } from 'react-router-dom';
+
+import Router from "./Router";
+import { AuthContextProvider } from "./context/AuthContext";
+import axios from 'axios';
+
+axios.defaults.withCredentials = true
 
 function App() {
   return (
     <>
-        <Routes>
-          <Route path="/" element={<Register></Register>} />
-        </Routes>
+      <Router>
+      </Router>
     </>
   );
 }

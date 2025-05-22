@@ -8,10 +8,14 @@ const app = express()
 const userRoute = require("./routes/userRoute")
 const messageRoute = require("./routes/messageRoute")
 
-
-app.use(cors())
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+    cors({
+        origin: ["http://localhost:3000"],
+        credentials: true,
+    })
+)
 app.use(express.static('public'));
 
 mongoose.connect(process.env.MONGO_URL)

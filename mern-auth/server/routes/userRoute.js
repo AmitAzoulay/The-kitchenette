@@ -10,7 +10,8 @@ const router = express.Router()
 router.post("/register", async (req,res) => {
     try {
         const {email, displayName, password} = req.body
-        
+       
+        console.log(email, displayName, password)
         if(!email || !displayName || !password) {
             res.status(400).send({errorMessage: "Please enter all required fields"})
         }
@@ -46,14 +47,12 @@ router.post("/register", async (req,res) => {
 router.post("/login", async (req,res) => {
     try {
         const {email, password} = req.body
-        
         if(!email || !password) {
             res.status(400).send({errorMessage: "Please enter all required fields"})
         }
-
         const existingUser = await userModel.findOne({email})
         if(!existingUser) {
-             res.status(401).send({errorMessage: "User does not exists"})
+             res.status(401).send({errorMessage: "User doesssssssssss not exists"})
         }
         
         const passwordCorrect = await bcrypt.compare(password,existingUser.password)
@@ -81,5 +80,19 @@ router.get("/logout", async (req,res) => {
         }).send()
 })
 
+router.get("/loggedIn", async (req,res) => {
+    try {
+        const token = req.cookies.token
+        if(!token) {
+            return res.status(401).json({errorMessage: "Unauthorized"})
+        }
+
+        jwt.verify(token, process.env.JWT_SECRET)
+        res.json(true)
+    } catch (error) {
+        console.log(error)
+        res.json(false)
+    }
+})
 
 module.exports = router
