@@ -29,7 +29,8 @@ const server = app.listen(process.env.PORT, () => {
 const io = require('socket.io')(server, {
     cors: {
         origin: process.env.REACT_URL,  // Your React frontend URL
-        methods: ['GET', 'POST']
+        methods: ['GET', 'POST'],
+        credentials: true,
     }
 });
 

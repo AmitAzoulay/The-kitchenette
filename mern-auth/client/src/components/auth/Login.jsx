@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import AuthContext from '../../context/AuthContext';
 
 
 const Login = () => {
     const navigate = useNavigate()
-    const[email,setEmail] = useState("")
-    const[password,setPassword] = useState("")
-
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const { getLoggedIn } = useContext(AuthContext)
     async function login(e) {
         e.preventDefault()
         try {
@@ -16,8 +17,9 @@ const Login = () => {
                 password,
             }
 
-            const response = await axios.post("http://localhost:4000/user/login",loginData)
-            if(response.status === 200) {
+            const response = await axios.post("http://localhost:4000/user/login", loginData)
+            if (response.status === 200) {
+                await getLoggedIn()
                 navigate("/chat")
             }
         } catch (error) {

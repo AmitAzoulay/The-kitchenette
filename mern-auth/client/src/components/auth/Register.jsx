@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import {Button, Form, FormControl} from 'react-bootstrap'
 import "./styles/Register.css"
 
 const Register = () => {
-    const[email,setEmail] = useState("")
-    const[displayName,setDisplayName] = useState("")
-    const[password,setPassword] = useState("")
+    const [email, setEmail] = useState("")
+    const [displayName, setDisplayName] = useState("")
+    const [password, setPassword] = useState("")
 
     async function register(e) {
         e.preventDefault()
@@ -18,7 +16,7 @@ const Register = () => {
                 password,
             }
 
-            await axios.post("http://localhost:4000/user/register",registerData)
+            await axios.post("http://localhost:4000/user/register", registerData)
         } catch (error) {
             console.log(error)
         }
