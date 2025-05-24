@@ -44,6 +44,7 @@ const Chat = () => {
         text: message,
         timestamp: new Date().toISOString(),
         user: user?.displayName || "Anonymous",
+        isAdmin: user?.isAdmin || false
       };
       socket.emit('chatMessage', chatMessage);
       setMessage('');
@@ -57,7 +58,7 @@ const Chat = () => {
         </div>
         <div className="card-body" style={{ height: '300px', overflowY: 'scroll' }}>
           {messages.map((msg, index) => (
-            <div key={index} className="mb-2">
+            <div key={index} style={{ color: msg.isAdmin ? "red" : "black" }} className="mb-2">
               <strong>{msg.user}:</strong> {msg.text}
               <div className="text-muted small">{new Date(msg.timestamp).toLocaleTimeString()}</div>
             </div>
