@@ -9,12 +9,13 @@ const Admin = () => {
     const {loggedIn} = useContext(AuthContext)
     useEffect(() => {
         const preventAdminBypass = async () => {
-          if(!loggedIn) {
-            navigate("/")
-          }
-          else if(!isAdmin) {
-            navigate("/chat")
-          }
+            if (loggedIn === undefined || isAdmin === undefined) return;
+            if(!loggedIn) {
+                navigate("/")
+            }
+            else if(!isAdmin) {
+                navigate("/chat")
+            }
         }
         preventAdminBypass()
     
