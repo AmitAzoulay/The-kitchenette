@@ -105,18 +105,36 @@ router.get("/loggedIn", async (req, res) => {
 
 router.get("/current", async (req, res) => {
     try {
-        console.log("hello")
         const token = req.cookies.token;
         if (!token) return res.status(401).json({ errorMessage: "Unauthorized" })
 
         const verified = jwt.verify(token, process.env.JWT_SECRET)
-        console.log(verified)
         const user = await userModel.findById(verified.user).select("-password")
 
         res.json(user)
     } catch (err) {
         console.error(err);
         res.status(401).json({ errorMessage: "Unauthorized" })
+    }
+})
+
+router.get("/isAdmin", async (req, res) => {
+    try {
+        const token = req.cookies.token;
+        if (!token) return res.json(false)
+
+        const verified = jwt.verify(token, process.env.JWT_SECRET)
+        const user = await userModel.findById(verified.user).select("-password")
+
+        if(user.isAdmin) {
+            return res.json(true)
+        }
+        else {
+            res.json(false)
+        }
+    } catch (err) {
+        console.error(err);
+        return res.json(false)
     }
 })
 module.exports = router

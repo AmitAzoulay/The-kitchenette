@@ -21,7 +21,6 @@ const Chat = () => {
         })
         if (!res.ok) throw new Error("Unauthorized")
         const data = await res.json()
-        console.log(data)
         setUser(data)
       } catch (err) {
         navigate("/")

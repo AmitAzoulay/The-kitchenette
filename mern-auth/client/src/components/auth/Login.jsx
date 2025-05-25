@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../../context/AuthContext';
+import AdminContext from '../../context/AdminContext';
 
 
 const Login = () => {
@@ -9,6 +10,7 @@ const Login = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const { getLoggedIn } = useContext(AuthContext)
+    const {getIsAdmin} = useContext(AdminContext)
     async function login(e) {
         e.preventDefault()
         try {
@@ -20,6 +22,7 @@ const Login = () => {
             const response = await axios.post("http://localhost:4000/user/login", loginData)
             if (response.status === 200) {
                 await getLoggedIn()
+                await getIsAdmin()
                 navigate("/chat")
             }
         } catch (error) {

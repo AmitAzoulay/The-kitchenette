@@ -6,9 +6,11 @@ import Navbar from "./components/layout/Navbar"
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthContext from './context/AuthContext';
+
 const Router = () => {
 
   const { loggedIn } = useContext(AuthContext)
+
   return (
     <BrowserRouter>
       <Navbar></Navbar>
@@ -22,10 +24,6 @@ const Router = () => {
           }
 
           <Route path="/chat" element={<Chat></Chat>} />
-
-
-
-
         </Route>
       </Routes>
     </BrowserRouter>
