@@ -1,8 +1,6 @@
 const express = require("express")
 const Message = require("../models/messageModel")
 const auth = require("../middleware/authMiddleware")
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
 
 const router = express.Router()
 
@@ -22,11 +20,10 @@ router.post("/addMessage", auth, async (req,res) => {
     }
 })
 
-router.get("/", auth, async (req,res) => {
+router.get("/getMessages", auth, async (req,res) => {
     try {
-       const messages = new Message.find()
+       const messages = await Message.find()
        res.json(messages)
-
     } catch(error) {
         res.status(500).send() 
     }

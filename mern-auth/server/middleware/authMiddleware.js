@@ -1,6 +1,5 @@
 function auth(req, res, next){
     try {
-        console.log(req.cookies)
         next()
     } catch (error) {
         console.log(error)

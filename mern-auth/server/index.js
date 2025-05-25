@@ -43,12 +43,12 @@ io.on('connection', (socket) => {
     console.log('New user connected:', socket.id)
 
      socket.on('chatMessage', async (data) => {
-        const user = data.user
+        
         const newMessage = new Message({
-                message: data.content,
-                username: user.displayName,
-                admin: user.isAdmin,
-                sentAt: data.timestamp
+                message: data.message,
+                username: data.username,
+                admin: data.admin,
+                sentAt: data.sentAt
                })
         await newMessage.save()
 

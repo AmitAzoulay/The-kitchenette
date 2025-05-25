@@ -12,19 +12,27 @@ const Chat = () => {
 
   useEffect(() => {
 
-    const fetchUser = async () => {
+    const fetchUserAndMessages = async () => {
       try {
-        const res = await fetch("http://localhost:4000/user/current", {
+        const userRes = await fetch("http://localhost:4000/user/current", {
           credentials: "include",
         })
-        if (!res.ok) throw new Error("Unauthorized")
-        const data = await res.json()
+        if (!userRes.ok) navigate("/")
+        const data = await userRes.json()
         setUser(data)
+
+        const messagesRes = await fetch("http://localhost:4000/chat/getMessages", {
+          credentials: "include",
+        })
+        const messagesData = await messagesRes.json();
+        console.log(messagesData)
+        setMessages(messagesData);
       } catch (err) {
-        navigate("/")
+        console.log(err)
       }
     }
-    fetchUser()
+    fetchUserAndMessages()
+    
     socket.on('message', (data) => {
       setMessages((prevMessages) => [...prevMessages, data]);
     });
@@ -38,9 +46,10 @@ const Chat = () => {
     e.preventDefault();
     if (message.trim()) {
       const chatMessage = {
-        content: message,
-        user: user,
-        timestamp: new Date()
+        message: message,
+        username: user.displayName,
+        admin: user.isAdmin,
+        sentAt: new Date()
       };
       socket.emit('chatMessage', chatMessage);
       setMessage('');
@@ -54,9 +63,9 @@ const Chat = () => {
         </div>
         <div className="card-body" style={{ height: '300px', overflowY: 'scroll' }}>
           {messages.map((msg, index) => (
-            <div key={index} style={{ color: msg.user.isAdmin ? "red" : "black" }} className="mb-2">
-              <strong>{msg.user.displayName}:</strong> {msg.content}
-              <div className="text-muted small">{new Date(msg.timestamp).toLocaleTimeString()}</div>
+            <div key={index} style={{ color: msg.admin ? "red" : "black" }} className="mb-2">
+              <strong>{msg.username}:</strong> {msg.message}
+              <div className="text-muted small">{new Date(msg.sentAt).toLocaleTimeString()}</div>
             </div>
           ))}
         </div>
