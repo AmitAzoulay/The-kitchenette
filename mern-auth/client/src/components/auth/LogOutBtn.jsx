@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../../context/AuthContext';
 import AdminContext from '../../context/AdminContext';
-
-
+import { Nav } from 'react-bootstrap';
 const LogOutBtn = () => {
     const navigate = useNavigate()
     const { getLoggedIn } = useContext(AuthContext);
@@ -17,9 +16,9 @@ const LogOutBtn = () => {
         navigate("/")
     }
     return (
-        <button onClick={logout}>
+        <Nav.Link onClick={logout}>
             Log Out
-        </button>
+        </Nav.Link  >
     )
 }
 

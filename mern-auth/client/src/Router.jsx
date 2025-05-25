@@ -2,11 +2,10 @@ import React, { useContext } from 'react'
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login"
 import Chat from "./components/chat/Chat"
-import Navbar from "./components/layout/Navbar"
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthContext from './context/AuthContext';
 import Admin from './components/admin/Admin';
+import NavbarHeader from './components/layout/Navbar';
 
 const Router = () => {
 
@@ -14,7 +13,7 @@ const Router = () => {
 
   return (
     <BrowserRouter>
-      <Navbar></Navbar>
+      <NavbarHeader></NavbarHeader>
       <Routes>
         <Route>
           {

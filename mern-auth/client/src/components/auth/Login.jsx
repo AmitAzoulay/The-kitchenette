@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../../context/AuthContext';
 import AdminContext from '../../context/AdminContext';
-
+import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 
 const Login = () => {
     const navigate = useNavigate()
@@ -26,28 +26,50 @@ const Login = () => {
                 navigate("/chat")
             }
         } catch (error) {
-            console.log(error)
+            alert(error.response.data.errorMessage)
         }
     }
     return (
-        <div>
-            <h1>Login</h1>
-            <form onSubmit={login}>
-                <input
-                    type='text'
-                    placeholder='Email'
-                    onChange={(e) => setEmail(e.target.value)}
+    <Container className="mt-5"  >
+      <Row className="justify-content-center" >
+        <Col md={6}>
+          <Card >
+            <Card.Header  variant="dark" className="bg-dark text-white">
+              <h4   className="mb-0">Login</h4>
+            </Card.Header>
+            <Card.Body>
+              <Form onSubmit={login}>
+                <Form.Group className="mb-3" controlId="formEmail">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter your email"
                     value={email}
-                />
-                <input
-                    type='text'
-                    placeholder='Password'
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter your password"
                     value={password}
-                />
-                <button type='submit'>Login</button>
-            </form>
-        </div>
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <Button type="submit" variant="dark" className="w-100">
+                  Login
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
     )
 }
 

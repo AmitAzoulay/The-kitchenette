@@ -29,7 +29,6 @@ router.post("/register", async (req, res) => {
             password: hashedPassword,
             isAdmin: false,
         })
-
         const savedUser = await newUser.save()
 
         const token = jwt.sign({

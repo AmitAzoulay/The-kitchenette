@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import "./styles/Register.css"
+import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap'
 
 const Register = () => {
+    const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [displayName, setDisplayName] = useState("")
     const [password, setPassword] = useState("")
@@ -16,36 +19,66 @@ const Register = () => {
                 password,
             }
 
-            await axios.post("http://localhost:4000/user/register", registerData)
+            const response = await axios.post("http://localhost:4000/user/register", registerData)
+            if (response.status === 200) {
+                navigate("/")
+            }
         } catch (error) {
-            console.log(error)
+            alert(error.response.data.errorMessage)
         }
     }
     return (
-        <div>
-            <h1>Signup</h1>
-            <form onSubmit={register}>
-                <input
-                    type='text'
-                    placeholder='Email'
-                    onChange={(e) => setEmail(e.target.value)}
+        <Container className="mt-5">
+      <Row className="justify-content-center">
+        <Col md={6}>
+          <Card>
+            <Card.Header className="bg-dark text-white">
+              <h4 className="mb-0">Sign Up</h4>
+            </Card.Header>
+            <Card.Body>
+              <Form onSubmit={register}>
+                <Form.Group className="mb-3" controlId="formEmail">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter your email"
                     value={email}
-                />
-                <input
-                    type='text'
-                    placeholder='Display Name'
-                    onChange={(e) => setDisplayName(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formDisplayName">
+                  <Form.Label>Display Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Choose a display name"
                     value={displayName}
-                />
-                <input
-                    type='text'
-                    placeholder='Password'
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Create a password"
                     value={password}
-                />
-                <button type='submit'>Register</button>
-            </form>
-        </div>
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+
+                <Button type="submit" variant="dark" className="w-100">
+                  Register
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
     )
 }
 

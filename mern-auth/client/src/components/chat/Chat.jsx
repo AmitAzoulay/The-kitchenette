@@ -1,5 +1,6 @@
 import React, {useEffect, useState } from 'react'
 import io from 'socket.io-client';
+import {Container, Card, Form, Button, CardBody } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 const socket = io('http://localhost:4000');
 
@@ -56,33 +57,33 @@ const Chat = () => {
     }
   };
   return (
-    <div className="container mt-4">
-      <div className="card">
-        <div className="card-header bg-primary text-white">
-          <h5 className="mb-0">Chat Room</h5>
-        </div>
-        <div className="card-body" style={{ height: '300px', overflowY: 'scroll' }}>
+    <Container className="mt-4">
+      <Card>
+        <Card.Header className="bg-dark text-white">
+          <h5 className="mb-0">The Kitchenette</h5>
+        </Card.Header>
+        <CardBody style={{ height: '300px', overflowY: 'scroll' }}>
           {messages.map((msg, index) => (
             <div key={index} style={{ color: msg.admin ? "red" : "black" }} className="mb-2">
               <strong>{msg.username}:</strong> {msg.message}
               <div className="text-muted small">{new Date(msg.sentAt).toLocaleTimeString()}</div>
             </div>
           ))}
-        </div>
-        <div className="card-footer">
-          <form onSubmit={sendMessage} className="d-flex">
-            <input
+        </CardBody>
+        <Card.Footer>
+          <Form onSubmit={sendMessage} className="d-flex">
+            <Form.Control
               type="text"
-              className="form-control me-2"
+              className="me-2"
               placeholder="Type a message..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
             />
-            <button type="submit" className="btn btn-primary">Send</button>
-          </form>
-        </div>
-      </div>
-    </div>
+            <Button type="submit" variant="dark" className="btn btn-primary">Send</Button>
+          </Form>
+        </Card.Footer>
+      </Card>
+    </Container>
   )
 }
 
