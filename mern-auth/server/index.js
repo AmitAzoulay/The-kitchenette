@@ -2,6 +2,7 @@ const express = require("express")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
 const mongoose = require("mongoose")
+const Message = require("./models/messageModel")
 require('dotenv').config()
 const app = express()
 
@@ -39,17 +40,22 @@ app.use("/user", userRoute)
 app.use("/chat", messageRoute)
 
 io.on('connection', (socket) => {
-    console.log('A user connected');
+    console.log('New user connected:', socket.id)
 
-    // Handle incoming messages
-    socket.on('chatMessage', (data) => {
-        // Save the message to MongoDB and broadcast to all connected clients
-        // You'll need to implement this part based on your specific schema and requirements
-        console.log(data);
+     socket.on('chatMessage', async (data) => {
+        const user = data.user
+        const newMessage = new Message({
+                message: data.content,
+                username: user.displayName,
+                admin: user.isAdmin,
+                sentAt: data.timestamp
+               })
+        await newMessage.save()
+
         io.emit('message', data);
-    });
+    })
 
     socket.on('disconnect', () => {
-        console.log('A user disconnected');
+        console.log('User disconnected:', socket.id);
     });
 });
