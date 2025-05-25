@@ -134,4 +134,26 @@ router.get("/isAdmin", async (req, res) => {
         return res.json(false)
     }
 })
+
+router.get("/getUsers", async (req, res) => {
+    try {
+        const users = await userModel.find()
+        res.json(users)
+    } catch(error) {
+        res.status(500).send() 
+    }
+})
+
+router.delete("/delete/:email", async (req, res) => {
+    try {
+        const deletedUser = await userModel.findOneAndDelete({email: req.params.email})
+        if (!deletedUser) {
+            return res.status(404).json({ message: 'User not found' })
+        } 
+        res.json(deletedUser)
+    } catch(error) {
+        res.status(500).send() 
+    }
+})
+
 module.exports = router
