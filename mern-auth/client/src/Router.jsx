@@ -6,6 +6,7 @@ import Navbar from "./components/layout/Navbar"
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthContext from './context/AuthContext';
+import Admin from './components/admin/Admin';
 
 const Router = () => {
 
@@ -20,10 +21,20 @@ const Router = () => {
             loggedIn === false && <>
               <Route path="/register" element={<Register></Register>} />
               <Route path="/" element={<Login></Login>} />
+              <Route path="/chat" element={<Chat></Chat>} />
+              <Route path="/admin" element={<Admin></Admin>} />
+            </>
+          }
+          {
+            loggedIn === true && <>
+              <Route path="/register" element={<Register></Register>} />
+              <Route path="/" element={<Login></Login>} />
+              <Route path="/chat" element={<Chat></Chat>} />
+              <Route path="/admin" element={<Admin></Admin>} />
             </>
           }
 
-          <Route path="/chat" element={<Chat></Chat>} />
+          
         </Route>
       </Routes>
     </BrowserRouter>

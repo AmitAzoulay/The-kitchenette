@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
-import AuthContext from '../../context/AuthContext';
+import React, {useEffect, useState } from 'react'
 import io from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 const socket = io('http://localhost:4000');
@@ -11,7 +10,6 @@ const Chat = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate()
 
-  const { loggedIn } = useContext(AuthContext);
   useEffect(() => {
 
     const fetchUser = async () => {

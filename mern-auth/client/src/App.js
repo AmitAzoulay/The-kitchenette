@@ -10,11 +10,13 @@ axios.defaults.withCredentials = true
 function App() {
   return (
     <>
-      <AdminContextProvider>
+      
         <AuthContextProvider>
-          <Router />
+          <AdminContextProvider>
+            <Router />
+          </AdminContextProvider>           
         </AuthContextProvider>
-      </AdminContextProvider>
+     
       
     </>
   );

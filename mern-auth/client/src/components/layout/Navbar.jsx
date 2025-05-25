@@ -7,7 +7,6 @@ import AdminContext from '../../context/AdminContext';
 const Navbar = () => {
   const { loggedIn } = useContext(AuthContext);
   const {isAdmin} = useContext(AdminContext)
-  console.log(isAdmin)
   return (
     <div>
       {loggedIn === false && (

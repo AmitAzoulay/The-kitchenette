@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken")
 
 const router = express.Router()
 
-router.post("/", auth, async (req,res) => {
+router.post("/addMessage", auth, async (req,res) => {
     try {
        const {displayName, message} = req.body
        const newMessage = new Message({
