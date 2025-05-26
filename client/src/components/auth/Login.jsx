@@ -34,7 +34,7 @@ const Login = () => {
       <Row className="justify-content-center" >
         <Col md={6}>
           <Card >
-            <Card.Header  variant="dark" className="bg-dark text-white">
+            <Card.Header variant="dark" className="bg-dark text-white">
               <h4   className="mb-0">Login</h4>
             </Card.Header>
             <Card.Body>

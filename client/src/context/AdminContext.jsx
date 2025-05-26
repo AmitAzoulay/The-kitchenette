@@ -8,9 +8,7 @@ const AdminContextProvider = (props) => {
     const [isAdmin, setIsAdmin] = useState(undefined)
 
      async function getIsAdmin(props) {
-        const isAdminRes = await axios.get("http://localhost:4000/user/isAdmin",{
-            withCredentials: true
-        })
+        const isAdminRes = await axios.get("http://localhost:4000/user/isAdmin")
         setIsAdmin(isAdminRes.data)
     }
     useEffect(() => {
