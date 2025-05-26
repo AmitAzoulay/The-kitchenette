@@ -49,12 +49,14 @@ const Chat = () => {
         message: message,
         username: user.displayName,
         admin: user.isAdmin,
+        email: user.email,
         sentAt: new Date()
       };
       socket.emit('chatMessage', chatMessage);
       setMessage('');
     }
   };
+  
   return (
     <Container className="mt-4">
       <Card>
@@ -64,7 +66,7 @@ const Chat = () => {
         <CardBody style={{ height: '300px', overflowY: 'scroll' }}>
           {messages.map((msg, index) => (
             <div key={index} style={{ color: msg.admin ? "red" : "black" }} className="mb-2">
-              <strong>{msg.username}:</strong> {msg.message}
+              <strong>{msg.username}{user.email === msg.email ? "(you)" : ""}:</strong> {msg.message}
               <div className="text-muted small">{new Date(msg.sentAt).toLocaleTimeString()}</div>
             </div>
           ))}

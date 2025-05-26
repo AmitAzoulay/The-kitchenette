@@ -9,6 +9,7 @@ const Admin = () => {
     const [users, setUsers] = useState([]);
     const {isAdmin} = useContext(AdminContext)
     const {loggedIn} = useContext(AuthContext)
+    
     useEffect(() => {
         const preventAdminBypass = async () => {
             if (loggedIn === undefined || isAdmin === undefined) return;
@@ -48,8 +49,7 @@ const Admin = () => {
             }
         } catch (err) {
             alert(err)
-        }
-        
+        }   
     }
   return (
     

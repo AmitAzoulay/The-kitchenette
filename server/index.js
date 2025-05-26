@@ -29,7 +29,7 @@ const server = app.listen(process.env.PORT, () => {
 
 const io = require('socket.io')(server, {
     cors: {
-        origin: process.env.REACT_URL,  // Your React frontend URL
+        origin: process.env.REACT_URL,  
         methods: ['GET', 'POST', 'DELETE'],
         credentials: true,
     }
@@ -48,6 +48,7 @@ io.on('connection', (socket) => {
                 message: data.message,
                 username: data.username,
                 admin: data.admin,
+                email: data.email,
                 sentAt: data.sentAt
                })
         await newMessage.save()
