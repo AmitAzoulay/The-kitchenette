@@ -26,7 +26,6 @@ const Chat = () => {
           credentials: "include",
         })
         const messagesData = await messagesRes.json();
-        console.log(messagesData)
         setMessages(messagesData);
       } catch (err) {
         console.log(err)
