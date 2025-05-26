@@ -2,6 +2,7 @@ const express = require("express")
 const userModel = require("../models/userModel")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const auth = require("../middlewares/authMiddleware")
 
 //U!n&JJ&iPC-Uwq8zyTu@J*acc!BG$3Ie@S0lvoUa8ye0Syxdro
 
@@ -135,7 +136,7 @@ router.get("/isAdmin", async (req, res) => {
     }
 })
 
-router.get("/getUsers", async (req, res) => {
+router.get("/getUsers", auth,async (req, res) => {
     try {
         const users = await userModel.find()
         res.json(users)

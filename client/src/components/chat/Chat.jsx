@@ -63,7 +63,7 @@ const Chat = () => {
         <Card.Header className="bg-dark text-white">
           <h5 className="mb-0">The Kitchenette</h5>
         </Card.Header>
-        <CardBody style={{ height: '300px', overflowY: 'scroll' }}>
+        <CardBody style={{ height: '600px', overflowY: 'scroll' }}>
           {messages.map((msg, index) => (
             <div key={index} style={{ color: msg.admin ? "red" : "black" }} className="mb-2">
               <strong>{msg.username}{user.email === msg.email ? "(you)" : ""}:</strong> {msg.message}

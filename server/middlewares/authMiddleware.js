@@ -1,6 +1,11 @@
 function auth(req, res, next){
     try {
-        next()
+        const token = req.cookies.token;
+        if (token)
+        {
+            next()
+        }      
+        res.status(401).json({errorMessage: "Unauthorized"})
     } catch (error) {
         console.log(error)
         res.status(401).json({errorMessage: "Unauthorized"})

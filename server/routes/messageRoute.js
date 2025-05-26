@@ -1,10 +1,10 @@
 const express = require("express")
 const Message = require("../models/messageModel")
-const auth = require("../middleware/authMiddleware")
+const auth = require("../middlewares/authMiddleware")
 
 const router = express.Router()
 
-router.post("/addMessage", auth, async (req,res) => {
+router.post("/addMessage", async (req,res) => {
     try {
        const {displayName, message} = req.body
        const newMessage = new Message({
@@ -20,7 +20,7 @@ router.post("/addMessage", auth, async (req,res) => {
     }
 })
 
-router.get("/getMessages", auth, async (req,res) => {
+router.get("/getMessages", auth ,async (req,res) => {
     try {
        const messages = await Message.find()
        res.json(messages)
