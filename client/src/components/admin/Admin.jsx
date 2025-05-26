@@ -19,22 +19,22 @@ const Admin = () => {
             else if(!isAdmin) {
                 navigate("/chat")
             }
+            else{
+                const fetchUsers = async () => {
+                try {
+                    const usersRes = await fetch("http://localhost:4000/user/getUsers")
+                    if (!usersRes.ok) navigate("/")
+                    const data = await usersRes.json()
+                    setUsers(data)
+                } catch (err) {
+                    console.log(err)
+                }
+        }
+        fetchUsers()
+            }
         }
         preventAdminBypass()
         
-        const fetchUsers = async () => {
-            try {
-                const usersRes = await fetch("http://localhost:4000/user/getUsers", {
-                    credentials: "include",
-                })
-                if (!usersRes.ok) navigate("/")
-                const data = await usersRes.json()
-                setUsers(data)
-            } catch (err) {
-                console.log(err)
-            }
-        }
-        fetchUsers()
 
       }, [isAdmin,loggedIn,navigate]);
 

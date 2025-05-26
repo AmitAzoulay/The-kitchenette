@@ -19,14 +19,17 @@ const Chat = () => {
           credentials: "include",
         })
         if (!userRes.ok) navigate("/")
-        const data = await userRes.json()
-        setUser(data)
+        else{
+          const data = await userRes.json()
+          setUser(data)
 
-        const messagesRes = await fetch("http://localhost:4000/chat/getMessages", {
-          credentials: "include",
-        })
-        const messagesData = await messagesRes.json();
-        setMessages(messagesData);
+          const messagesRes = await fetch("http://localhost:4000/chat/getMessages", {
+            credentials: "include",
+          })
+          const messagesData = await messagesRes.json();
+          setMessages(messagesData);
+        }
+        
       } catch (err) {
         console.log(err)
       }

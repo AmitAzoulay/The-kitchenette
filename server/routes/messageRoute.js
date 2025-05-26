@@ -20,7 +20,7 @@ router.post("/addMessage", async (req,res) => {
     }
 })
 
-router.get("/getMessages", auth ,async (req,res) => {
+router.get("/getMessages" ,async (req,res) => {
     try {
        const messages = await Message.find()
        res.json(messages)
