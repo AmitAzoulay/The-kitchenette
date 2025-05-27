@@ -2,7 +2,9 @@ import React, {useEffect, useState } from 'react'
 import io from 'socket.io-client';
 import {Container, Card, Form, Button, CardBody } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
-const socket = io('http://localhost:4000');
+const socket = io('http://localhost:4000',{
+  withCredentials: true
+});
 
 
 const Chat = () => {

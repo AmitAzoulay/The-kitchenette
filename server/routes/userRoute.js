@@ -59,7 +59,7 @@ router.post("/login", async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
+            secure: false,
         }).send()
 
     } catch (error) {
@@ -70,7 +70,7 @@ router.post("/login", async (req, res) => {
 router.get("/logout", async (req, res) => {
     res.cookie("token", "", {
         httpOnly: true,
-        secure: true,
+        secure: false,
         expires: new Date(0),
     }).send()
 })
