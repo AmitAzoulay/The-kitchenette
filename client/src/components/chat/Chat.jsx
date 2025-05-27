@@ -2,6 +2,7 @@ import React, {useEffect, useState } from 'react'
 import io from 'socket.io-client';
 import {Container, Card, Form, Button, CardBody } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
+
 const socket = io('http://localhost:4000',{
   withCredentials: true
 });
@@ -14,13 +15,8 @@ const Chat = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-
     const fetchUserAndMessages = async () => {
       try {
-        
-     
-          
-
           const messagesRes = await fetch("http://localhost:4000/chat/getMessages", {
             credentials: "include",
           })
@@ -43,6 +39,8 @@ const Chat = () => {
       }
     }
     fetchUserAndMessages()
+
+    
     
     socket.on('message', (data) => {
       setMessages((prevMessages) => [...prevMessages, data]);

@@ -95,7 +95,7 @@ router.get("/current", async (req, res) => {
         if (!token) return res.status(401).json({ errorMessage: "Unauthorized" })
 
         const verified = jwt.verify(token, process.env.JWT_SECRET)
-        const user = await userModel.findById(verified.user).select("-password")
+        const user = await userModel.findById(verified.user).select("-password").select("-_id")
 
         res.json(user)
     } catch (err) {
