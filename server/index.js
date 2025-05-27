@@ -17,8 +17,6 @@ app.use(
         credentials: true,
     })
 )
-//app.use(express.static('public'));
-
 mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('Connected to MongoDB!'))
     .catch(err => console.error('Database connection error:', err))

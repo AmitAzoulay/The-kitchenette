@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../../context/AuthContext';
+import bcrypt from 'bcryptjs';
 import AdminContext from '../../context/AdminContext';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 
@@ -18,6 +19,8 @@ const Login = () => {
                 email,
                 password,
             }
+            const salt = '$2b$10$' + process.env.REACT_APP_ZHASH
+            loginData.password = await bcrypt.hash(password, salt)
 
             const response = await axios.post("http://localhost:4000/user/login", loginData)
             if (response.status === 200) {

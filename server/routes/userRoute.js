@@ -2,7 +2,6 @@ const express = require("express")
 const userModel = require("../models/userModel")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-//U!n&JJ&iPC-Uwq8zyTu@J*acc!BG$3Ie@S0lvoUa8ye0Syxdro
 
 const router = express.Router()
 
@@ -13,34 +12,24 @@ router.post("/register", async (req, res) => {
             res.status(400).send({ errorMessage: "Please enter all required fields" })
         }
 
-
         const existingUser = await userModel.findOne({ email })
 
         if (existingUser) {
             res.status(400).send({ errorMessage: "An account with this email already exists" })
         }
-
-        const salt = await bcrypt.genSalt()
-        const hashedPassword = await bcrypt.hash(password, salt)
+        
         const newUser = new userModel({
             displayName,
             email,
-            password: hashedPassword,
+            password: password,
             isAdmin: false,
         })
-        const savedUser = await newUser.save()
+        await newUser.save()
 
-        const token = jwt.sign({
-            user: savedUser._id
-        }, process.env.JWT_SECRET)
-
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: true,
-        }).send()
+        res.status(200).send()
 
     } catch (error) {
-        res.status(500).send()
+        res.status(500).send(error)
     }
 })
 
@@ -53,19 +42,19 @@ router.post("/login", async (req, res) => {
         }
 
         const existingUser = await userModel.findOne({ email })
+        
 
         if (!existingUser) {
-            res.status(401).send({ errorMessage: "User doesssssssssss not exists" })
+            res.status(401).send({ errorMessage: "User does not exist" })
         }
 
-        const passwordCorrect = await bcrypt.compare(password, existingUser.password)
-
-        if (!passwordCorrect) {
+        if (password !== existingUser.password) {
             res.status(401).send({ errorMessage: "Wrong email or password" })
         }
 
         const token = jwt.sign({
-            user: existingUser._id
+            user: existingUser._id,
+            email: email
         }, process.env.JWT_SECRET)
 
         res.cookie("token", token, {

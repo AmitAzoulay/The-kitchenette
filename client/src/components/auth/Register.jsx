@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap'
+import bcrypt from 'bcryptjs';
 
 const Register = () => {
     const navigate = useNavigate()
@@ -17,8 +18,10 @@ const Register = () => {
                 displayName,
                 password,
             }
-
+            const salt = '$2b$10$' + process.env.REACT_APP_ZHASH
+            registerData.password = await bcrypt.hash(password, salt)
             const response = await axios.post("http://localhost:4000/user/register", registerData)
+            console.log(response.status)
             if (response.status === 200) {
                 navigate("/")
             }
