@@ -126,7 +126,7 @@ router.get("/isAdmin", async (req, res) => {
 
 router.get("/getUsers" , adminAuth ,async (req, res) => {
     try {
-        const users = await userModel.find()
+        const users = await userModel.find().select("-password").select("-_id")
         res.json(users)
     } catch(error) {
         res.status(500).send() 

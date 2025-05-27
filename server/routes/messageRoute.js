@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.get("/getMessages",auth ,async (req,res) => {
     try {
-       const messages = await Message.find()
+       const messages = await Message.find().select("-_id")
        res.json(messages)
     } catch(error) {
         res.status(500).send() 
