@@ -2,7 +2,7 @@ const express = require("express")
 const userModel = require("../models/userModel")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-
+const adminAuth = require("../middlewares/adminMiddlware")
 const router = express.Router()
 
 router.post("/register", async (req, res) => {
@@ -54,7 +54,8 @@ router.post("/login", async (req, res) => {
 
         const token = jwt.sign({
             user: existingUser._id,
-            email: email
+            email: email,
+            isAdmin : existingUser.isAdmin,
         }, process.env.JWT_SECRET)
 
         res.cookie("token", token, {
@@ -123,7 +124,7 @@ router.get("/isAdmin", async (req, res) => {
     }
 })
 
-router.get("/getUsers" ,async (req, res) => {
+router.get("/getUsers" , adminAuth ,async (req, res) => {
     try {
         const users = await userModel.find()
         res.json(users)

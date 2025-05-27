@@ -11,29 +11,23 @@ const Admin = () => {
     const {loggedIn} = useContext(AuthContext)
     
     useEffect(() => {
-        const preventAdminBypass = async () => {
-            if (loggedIn === undefined || isAdmin === undefined) return;
-            if(!loggedIn) {
-                navigate("/")
+
+        const fetchUsers = async () => {
+            try {
+                console.log("fffffffffffffff")
+                const usersRes = await fetch("http://localhost:4000/user/getUsers",{
+                    credentials: "include",
+                })
+                console.log(usersRes)
+                if (!usersRes.ok) navigate("/")
+                const data = await usersRes.json()
+                setUsers(data)
+            } catch (err) {
+                console.log(err)
             }
-            else if(!isAdmin) {
-                navigate("/chat")
-            }
-            else{
-                const fetchUsers = async () => {
-                try {
-                    const usersRes = await fetch("http://localhost:4000/user/getUsers")
-                    if (!usersRes.ok) navigate("/")
-                    const data = await usersRes.json()
-                    setUsers(data)
-                } catch (err) {
-                    console.log(err)
-                }
         }
         fetchUsers()
-            }
-        }
-        preventAdminBypass()
+            
         
 
       }, [isAdmin,loggedIn,navigate]);

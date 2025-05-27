@@ -5,7 +5,6 @@ function auth(req, res, next){
         
         const token = req.cookies.token;
         const verified = jwt.verify(token, process.env.JWT_SECRET)
-        console.log(verified)
         if (verified)
         {
             next()

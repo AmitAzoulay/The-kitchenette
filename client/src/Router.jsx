@@ -6,10 +6,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthContext from './context/AuthContext';
 import Admin from './components/admin/Admin';
 import NavbarHeader from './components/layout/Navbar';
+import AdminContext from './context/AdminContext';
 
 const Router = () => {
 
   const { loggedIn } = useContext(AuthContext)
+  const {isAdmin} = useContext(AdminContext)
 
   return (
     <BrowserRouter>
@@ -21,7 +23,6 @@ const Router = () => {
               <Route path="/register" element={<Register></Register>} />
               <Route path="/" element={<Login></Login>} />
               <Route path="/chat" element={<Chat></Chat>} />
-              <Route path="/admin" element={<Admin></Admin>} />
             </>
           }
           {
@@ -29,6 +30,10 @@ const Router = () => {
               <Route path="/register" element={<Register></Register>} />
               <Route path="/" element={<Login></Login>} />
               <Route path="/chat" element={<Chat></Chat>} />
+            </>
+          }
+          {
+            isAdmin === true && <>
               <Route path="/admin" element={<Admin></Admin>} />
             </>
           }
