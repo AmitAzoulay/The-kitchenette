@@ -17,7 +17,7 @@ app.use(
         credentials: true,
     })
 )
-app.use(express.static('public'));
+//app.use(express.static('public'));
 
 mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('Connected to MongoDB!'))
@@ -40,7 +40,6 @@ app.use("/user", userRoute)
 app.use("/chat", messageRoute)
 
 io.on('connection', (socket) => {
-    console.log('New user connected:', socket.id)
 
      socket.on('chatMessage', async (data) => {
         
@@ -55,8 +54,4 @@ io.on('connection', (socket) => {
 
         io.emit('message', data);
     })
-
-    socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
-    });
 });
