@@ -2,7 +2,8 @@ const express = require("express")
 const userModel = require("../models/userModel")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const adminAuth = require("../middlewares/adminMiddlware")
+const {adminAuth,boolAdminAuth} = require("../middlewares/adminMiddlware")
+const {auth,boolAuth} = require("../middlewares/authMiddleware")
 const router = express.Router()
 
 router.post("/register", async (req, res) => {
@@ -55,6 +56,7 @@ router.post("/login", async (req, res) => {
         const token = jwt.sign({
             user: existingUser._id,
             email: email,
+            username: existingUser.displayName,
             isAdmin : existingUser.isAdmin,
         }, process.env.JWT_SECRET)
 
@@ -68,25 +70,17 @@ router.post("/login", async (req, res) => {
     }
 })
 
+
 router.get("/logout", async (req, res) => {
-    res.cookie("token", "", {
-        httpOnly: true,
-        secure: false,
-        expires: new Date(0),
+    res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    path: "/", 
     }).send()
 })
 
-router.get("/loggedIn", async (req, res) => {
-    try {
-        const token = req.cookies.token;
-        if (!token) return res.json(false);
-
-        jwt.verify(token, process.env.JWT_SECRET);
-
-        res.send(true);
-    } catch (err) {
-        res.json(false);
-    }
+router.get("/loggedIn",boolAuth, async (req, res) => {
+    
 })
 
 router.get("/current", async (req, res) => {
@@ -104,24 +98,9 @@ router.get("/current", async (req, res) => {
     }
 })
 
-router.get("/isAdmin", async (req, res) => {
-    try {
-        const token = req.cookies.token;
-        if (!token) return res.json(false)
-
-        const verified = jwt.verify(token, process.env.JWT_SECRET)
-        const user = await userModel.findById(verified.user).select("-password")
-
-        if(user.isAdmin) {
-            return res.json(true)
-        }
-        else {
-            res.json(false)
-        }
-    } catch (err) {
-        console.error(err);
-        return res.json(false)
-    }
+router.get("/isAdmin",boolAdminAuth,async (req, res) => {
+ 
+    
 })
 
 router.get("/getUsers" , adminAuth ,async (req, res) => {
@@ -133,7 +112,7 @@ router.get("/getUsers" , adminAuth ,async (req, res) => {
     }
 })
 
-router.delete("/delete/:email", async (req, res) => {
+router.delete("/delete/:email", adminAuth, async (req, res) => {
     try {
         const deletedUser = await userModel.findOneAndDelete({email: req.params.email})
         if (!deletedUser) {

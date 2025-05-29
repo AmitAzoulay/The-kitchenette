@@ -1,6 +1,6 @@
 const express = require("express")
 const Message = require("../models/messageModel")
-const auth = require("../middlewares/authMiddleware")
+const {auth,boolAuth} = require("../middlewares/authMiddleware")
 
 const router = express.Router()
 

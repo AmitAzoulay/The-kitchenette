@@ -24,5 +24,26 @@ function adminAuth(req, res, next){
         res.status(401).json({errorMessage: "Unauthorized"})
     }
 }
+function boolAdminAuth(req,res,next){
+    try {
+            const token = req.cookies.token;
+            if (!token) return res.json(false)
+    
+            const verified = jwt.verify(token, process.env.JWT_SECRET)
+    
+          if(verified.isAdmin) {
+              
+                return res.json(true)
+            }
+            else {
+             
+                 res.json(false)
+        }
+        } catch (err) {
+            
+            console.error(err);
+            return res.json(false)
+        }
+}
 
-module.exports = adminAuth
+module.exports = {adminAuth,boolAdminAuth}

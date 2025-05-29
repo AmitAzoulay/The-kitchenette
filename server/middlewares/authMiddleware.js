@@ -19,5 +19,22 @@ function auth(req, res, next){
         res.status(401).json({errorMessage: "Unauthorized"})
     }
 }
-
-module.exports = auth
+function boolAuth(req, res, next) {
+    try {
+            const token = req.cookies.token;
+            if (!token) return res.json(false);
+    
+            const verified = jwt.verify(token, process.env.JWT_SECRET);
+            if(verified){
+                res.send(true);
+            }
+            else{
+                    res.send(false);
+            }
+    
+            
+        } catch (err) {
+            res.json(false);
+        }
+}
+module.exports = {auth,boolAuth}

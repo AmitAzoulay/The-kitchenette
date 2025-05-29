@@ -1,71 +1,76 @@
-import React, {useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
-import {Container, Card, Form, Button, CardBody } from 'react-bootstrap'
+import { Container, Card, Form, Button, CardBody } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-const socket = io('http://localhost:4000',{
-  withCredentials: true
-});
-
-
 const Chat = () => {
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate()
+  const [message, setMessage] = useState('')
+  const [messages, setMessages] = useState([])
+  const [user, setUser] = useState(null)
+  const socketRef = useRef(null)
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserAndMessages = async () => {
       try {
-          const messagesRes = await fetch("http://localhost:4000/chat/getMessages", {
-            credentials: "include",
-          })
-          if(messagesRes.ok) {
-            const userRes = await fetch("http://localhost:4000/user/current", {
-              credentials: "include",
-            })
-            const data = await userRes.json()
-            setUser(data)
-          }
-          else {
-            navigate("/")
-          }
-          const messagesData = await messagesRes.json();
-          setMessages(messagesData);
-        
-        
+        const messagesRes = await fetch('http://localhost:4000/chat/getMessages', {
+          credentials: 'include',
+        })
+
+        if (!messagesRes.ok) {
+          navigate('/');
+          return;
+        }
+        const userRes = await fetch('http://localhost:4000/user/current', {
+          credentials: 'include',
+        });
+
+        const userData = await userRes.json()
+        setUser(userData);
+
+        const messagesData = await messagesRes.json()
+        setMessages(messagesData);
+
+        if (!socketRef.current) {
+          socketRef.current = io('http://localhost:4000', {
+            withCredentials: true,
+          });
+
+          socketRef.current.on('message', (data) => {
+            setMessages((prevMessages) => [...prevMessages, data])
+          });
+        }
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
-    }
-    fetchUserAndMessages()
-   
-    
-    
-    socket.on('message', (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]);
-    });
+    };
+
+    fetchUserAndMessages();
 
     return () => {
-      socket.off('message');
+      if (socketRef.current) {
+        socketRef.current.disconnect()
+        socketRef.current = null
+      }
     };
   }, [navigate]);
 
   const sendMessage = (e) => {
     e.preventDefault();
-    if (message.trim()) {
+    if (message.trim() && socketRef.current && user) {
       const chatMessage = {
-        message: message,
+        message,
         username: user.displayName,
         admin: user.isAdmin,
         email: user.email,
-        sentAt: new Date()
+        sentAt: new Date(),
+            
       };
-      socket.emit('chatMessage', chatMessage);
+      socketRef.current.emit('chatMessage', chatMessage);
       setMessage('');
     }
   };
-  
+
   return (
     <Container className="mt-4">
       <Card>
@@ -74,8 +79,8 @@ const Chat = () => {
         </Card.Header>
         <CardBody style={{ height: '600px', overflowY: 'scroll' }}>
           {messages.map((msg, index) => (
-            <div key={index} style={{ color: msg.admin ? "red" : "black" }} className="mb-2">
-              <strong>{msg.username}{user.email === msg.email ? "(you)" : ""}:</strong> {msg.message}
+            <div key={index} style={{ color: msg.admin ? 'red' : 'black' }} className="mb-2">
+              <strong>{msg.username}{user && user.email === msg.email ? ' (you)' : ''}:</strong> {msg.message}
               <div className="text-muted small">{new Date(msg.sentAt).toLocaleTimeString()}</div>
             </div>
           ))}
@@ -89,12 +94,12 @@ const Chat = () => {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
             />
-            <Button type="submit" variant="dark" className="btn btn-primary">Send</Button>
+            <Button type="submit" variant="dark">Send</Button>
           </Form>
         </Card.Footer>
       </Card>
     </Container>
-  )
-}
+  );
+};
 
-export default Chat
+export default Chat;
