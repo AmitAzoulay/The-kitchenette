@@ -14,7 +14,6 @@ const Admin = () => {
 
         const fetchUsers = async () => {
             try {
-                console.log("fffffffffffffff")
                 const usersRes = await fetch("http://localhost:4000/user/getUsers",{
                     credentials: "include",
                 })

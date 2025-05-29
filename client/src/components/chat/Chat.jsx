@@ -39,7 +39,7 @@ const Chat = () => {
       }
     }
     fetchUserAndMessages()
-
+   
     
     
     socket.on('message', (data) => {
