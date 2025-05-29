@@ -8,7 +8,7 @@
 # from Docker Hub - https://hub.docker.com/_/mongo. 
 # You can add other services your application may depend on here.
 
-version: '3'
+
 
 services:
   client:

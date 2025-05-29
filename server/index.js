@@ -42,34 +42,15 @@ app.use("/chat", messageRoute)
 io.on('connection', (socket) => {
 
      socket.on('chatMessage', async (data) => {
-        const cookies = socket.handshake.headers.cookie
-        
-        if (cookies) {
-            const parsedCookies = cookie.parse(cookies)
-            const token = parsedCookies['token']
 
-            try{
-                const verified = jwt.verify(token, process.env.JWT_SECRET)
-
-                if(verified.email === data.email)
-                {
-                    const newMessage = new Message({
-                        message: data.message,
-                        username: data.username,
-                        admin: data.admin,
-                        email: data.email,
-                        sentAt: data.sentAt
-                    })
-                    await newMessage.save()
-                    io.emit('message', data);
-                }
-            } catch(error) {
-                console.log(error)
-            }
-            
-        }
-
-        
-        
+        const newMessage = new Message({
+            message: data.message,
+            username: data.username,
+            admin: data.admin,
+            email: data.email,
+            sentAt: data.sentAt
+        })
+        await newMessage.save()
+        io.emit('message', data);
     })
 });
