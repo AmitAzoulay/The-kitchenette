@@ -4,9 +4,7 @@ function adminAuth(req, res, next){
     try {
         
         const token = req.cookies.token;
-        console.log("token: ",token)
         const verified = jwt.verify(token, process.env.JWT_SECRET)
-        console.log(verified)
         if (verified.isAdmin)
         {
             next()

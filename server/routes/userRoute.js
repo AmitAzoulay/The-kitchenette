@@ -97,7 +97,9 @@ router.get("/current", async (req, res) => {
         res.status(401).json({ errorMessage: "Unauthorized" })
     }
 })
-
+router.get("/", async (req, res) => {
+    res.status(200).send()
+})
 router.get("/isAdmin",boolAdminAuth,async (req, res) => {
  
     

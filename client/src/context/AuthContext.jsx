@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react'
-import axios from 'axios';
+import axios from '../axios';
 
 const AuthContext = createContext()
 
@@ -7,8 +7,13 @@ const AuthContextProvider = (props) => {
     const [loggedIn, setLoggedIn] = useState(undefined)
 
     async function getLoggedIn(props) {
-        const loggedInRes = await axios.get("http://localhost:4000/user/loggedIn",{withCredentials: true})
-        setLoggedIn(loggedInRes.data)
+        try {
+            const loggedInRes = await axios.get("http://localhost:4000/user/loggedIn",{withCredentials: true})
+            setLoggedIn(loggedInRes.data)
+        } catch(err) {
+            console.log("Internal error, serve might be down")
+        }
+        
     }
 
     useEffect(() => {

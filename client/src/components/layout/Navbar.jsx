@@ -4,7 +4,7 @@ import AuthContext from "../../context/AuthContext";
 import AdminContext from '../../context/AdminContext';
 import { useNavigate } from 'react-router-dom';
 import {Container, Nav, Navbar,Card } from 'react-bootstrap'
-import axios from 'axios';
+import axios from '../../axios';
 
 const NavbarHeader = () => {
   const navigate = useNavigate()

@@ -12,7 +12,7 @@ const Router = () => {
 
   const { loggedIn } = useContext(AuthContext)
   const {isAdmin} = useContext(AdminContext)
-
+  
   return (
     <BrowserRouter>
       <NavbarHeader></NavbarHeader>

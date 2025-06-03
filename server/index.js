@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
     cors({
-        origin: ["http://localhost:3000"],
+        origin: [process.env.CLIENT_URL],
         credentials: true,
     })
 )
@@ -48,10 +48,8 @@ io.on('connection', (socket) => {
         if (cookies) {
             const parsedCookies = cookie.parse(cookies)
             const token = parsedCookies['token']
-            console.log(token)
             try{
                 const verified = jwt.verify(token, process.env.JWT_SECRET)
-                console.log(verified.email,data.email)
                 if(verified.email === data.email)
                 {
                     const newMessage = new Message({
@@ -70,8 +68,5 @@ io.on('connection', (socket) => {
             
         }
     })
-   // socket.on('disconnect', () => {
-   //     socket.disconnect(0)
-   //     console.log('A user disconnected');
-   // });
+
 });

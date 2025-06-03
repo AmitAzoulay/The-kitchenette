@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axios'
 import AuthContext from '../../context/AuthContext';
 import bcrypt from 'bcryptjs';
 import AdminContext from '../../context/AdminContext';
