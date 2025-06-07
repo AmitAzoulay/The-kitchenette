@@ -1,0 +1,2 @@
+>kubectl port-forward kitchenette-client-d86f8ffc6-chmr4 3000:80 -n the-kitchenette
+>kubectl port-forward kitchenette-server-7567cc6f84-rfrzs 4000:4000 -n the-kitchenette
