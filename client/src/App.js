@@ -13,25 +13,25 @@ function App() {
 
   const [serverError, setServerError] = useState(false)
   useEffect(() => {
-    axios.get("http://localhost:4000/user/")
+    axios.get('/user/')
       .catch(err => {
         console.log("server is down: ", err.message)
         setServerError(true)
       })
   })
-  if(serverError) {
+  if (serverError) {
     return (<h1>Server Down</h1>)
   }
   return (
-   <>
-        <AuthContextProvider>
-          <AdminContextProvider>
-            <Router />
-          </AdminContextProvider>           
-        </AuthContextProvider>
-    
+    <>
+      <AuthContextProvider>
+        <AdminContextProvider>
+          <Router />
+        </AdminContextProvider>
+      </AuthContextProvider>
+
     </>
-   
+
   );
 }
 

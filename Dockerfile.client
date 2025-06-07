@@ -1,21 +1,12 @@
-# Start your image with a node base image
-FROM node:18-alpine
-
-# The /app directory should act as the main application directory
-WORKDIR /app
-
-# Copy the app package and package-lock.json file
+FROM node:20-alpine3.20 AS build
+WORKDIR /usr/src/app
 COPY client/package*.json ./
-
-# Copy local directories to the current local directory of our docker image (/app)
+RUN npm ci
 COPY ./client ./
-
-# Install node packages, install serve, build the app, and remove dependencies at the end
-RUN npm install
 RUN npm run build
-RUN npm install -g serve
 
-EXPOSE 3000
-
-# Start the app using serve command
-CMD [ "serve", "-s", "build" ]
+FROM nginx:stable-alpine AS prod
+# COPY --from=build /usr/src/app/nginx /etc/nginx/conf.d
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"] 

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: the-kitchenette-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: the-kitchenette-frontend
+  template:
+    metadata:
+      labels:
+        app: the-kitchenette-frontend
+    spec:
+      containers:
+        - name: the-kitchenette-frontend
+          image: amitazoulay1611/the-kitchenette-client
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "256Mi" # Request 256 megabytes of memory
+            limits:
+              memory: "512Mi" # Limit to 512 megabytes of memory

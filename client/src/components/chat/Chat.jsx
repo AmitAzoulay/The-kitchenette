@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import { Container, Card, Form, Button, CardBody } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-
+import axios from 'axios';
+import instance from '../../axios';
 const Chat = () => {
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
@@ -13,7 +14,7 @@ const Chat = () => {
   useEffect(() => {
     const fetchUserAndMessages = async () => {
       try {
-        const messagesRes = await fetch('http://localhost:4000/chat/getMessages', {
+        const messagesRes = await instance.get(`/chat/getMessages`, {
           credentials: 'include',
         })
 
@@ -21,7 +22,7 @@ const Chat = () => {
           navigate('/');
           return;
         }
-        const userRes = await fetch('http://localhost:4000/user/current', {
+        const userRes = await instance.get(`/chat/current`, {
           credentials: 'include',
         });
 
@@ -32,7 +33,7 @@ const Chat = () => {
         setMessages(messagesData);
 
         if (!socketRef.current) {
-          socketRef.current = io('http://localhost:4000', {
+          socketRef.current = io(process.env.REACT_APP_SERVER_URL, {
             withCredentials: true,
           });
 
@@ -64,7 +65,7 @@ const Chat = () => {
         admin: user.isAdmin,
         email: user.email,
         sentAt: new Date(),
-            
+
       };
       socketRef.current.emit('chatMessage', chatMessage);
       setMessage('');

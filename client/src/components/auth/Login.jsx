@@ -7,38 +7,38 @@ import AdminContext from '../../context/AdminContext';
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 
 const Login = () => {
-    const navigate = useNavigate()
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const { getLoggedIn } = useContext(AuthContext)
-    const {getIsAdmin} = useContext(AdminContext)
-    async function login(e) {
-        e.preventDefault()
-        try {
-            const loginData = {
-                email,
-                password,
-            }
-            const salt = '$2b$10$' + process.env.REACT_APP_ZHASH
-            loginData.password = await bcrypt.hash(password, salt)
+  const navigate = useNavigate()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const { getLoggedIn } = useContext(AuthContext)
+  const { getIsAdmin } = useContext(AdminContext)
+  async function login(e) {
+    e.preventDefault()
+    try {
+      const loginData = {
+        email,
+        password,
+      }
+      const salt = '$2b$10$' + process.env.REACT_APP_ZHASH
+      loginData.password = await bcrypt.hash(password, salt)
 
-            const response = await axios.post("http://localhost:4000/user/login", loginData)
-            if (response.status === 200) {
-                await getLoggedIn()
-                await getIsAdmin()
-                navigate("/chat")
-            }
-        } catch (error) {
-            alert(error.response.data.errorMessage)
-        }
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/user/login`, loginData)
+      if (response.status === 200) {
+        await getLoggedIn()
+        await getIsAdmin()
+        navigate("/chat")
+      }
+    } catch (error) {
+      alert(error.response.data.errorMessage)
     }
-    return (
+  }
+  return (
     <Container className="mt-5"  >
       <Row className="justify-content-center" >
         <Col md={6}>
           <Card >
             <Card.Header variant="dark" className="bg-dark text-white">
-              <h4   className="mb-0">Login</h4>
+              <h4 className="mb-0">Login</h4>
             </Card.Header>
             <Card.Body>
               <Form onSubmit={login}>
@@ -73,7 +73,7 @@ const Login = () => {
         </Col>
       </Row>
     </Container>
-    )
+  )
 }
 
 export default Login

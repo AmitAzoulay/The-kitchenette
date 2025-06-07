@@ -5,32 +5,32 @@ import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap'
 import bcrypt from 'bcryptjs';
 
 const Register = () => {
-    const navigate = useNavigate()
-    const [email, setEmail] = useState("")
-    const [displayName, setDisplayName] = useState("")
-    const [password, setPassword] = useState("")
+  const navigate = useNavigate()
+  const [email, setEmail] = useState("")
+  const [displayName, setDisplayName] = useState("")
+  const [password, setPassword] = useState("")
 
-    async function register(e) {
-        e.preventDefault()
-        try {
-            const registerData = {
-                email,
-                displayName,
-                password,
-            }
-            const salt = '$2b$10$' + process.env.REACT_APP_ZHASH
-            registerData.password = await bcrypt.hash(password, salt)
-            const response = await axios.post("http://localhost:4000/user/register", registerData)
-            console.log(response.status)
-            if (response.status === 200) {
-                navigate("/")
-            }
-        } catch (error) {
-            alert(error.response.data.errorMessage)
-        }
+  async function register(e) {
+    e.preventDefault()
+    try {
+      const registerData = {
+        email,
+        displayName,
+        password,
+      }
+      const salt = '$2b$10$' + process.env.REACT_APP_ZHASH
+      registerData.password = await bcrypt.hash(password, salt)
+      const response = await axios.post(`/user/register`, registerData)
+      console.log(response.status)
+      if (response.status === 200) {
+        navigate("/")
+      }
+    } catch (error) {
+      alert(error.response.data.errorMessage)
     }
-    return (
-        <Container className="mt-5">
+  }
+  return (
+    <Container className="mt-5">
       <Row className="justify-content-center">
         <Col md={6}>
           <Card>
@@ -81,7 +81,7 @@ const Register = () => {
         </Col>
       </Row>
     </Container>
-    )
+  )
 }
 
 export default Register

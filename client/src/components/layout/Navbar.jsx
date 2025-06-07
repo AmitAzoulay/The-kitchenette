@@ -3,24 +3,24 @@ import { Link } from 'react-router-dom'
 import AuthContext from "../../context/AuthContext";
 import AdminContext from '../../context/AdminContext';
 import { useNavigate } from 'react-router-dom';
-import {Container, Nav, Navbar,Card } from 'react-bootstrap'
+import { Container, Nav, Navbar, Card } from 'react-bootstrap'
 import axios from '../../axios';
 
 const NavbarHeader = () => {
   const navigate = useNavigate()
   const { loggedIn } = useContext(AuthContext)
-  const {isAdmin} = useContext(AdminContext)
+  const { isAdmin } = useContext(AdminContext)
   const { getLoggedIn } = useContext(AuthContext)
-  const {getIsAdmin} = useContext(AdminContext)
-  
+  const { getIsAdmin } = useContext(AdminContext)
+
   async function logout() {
-        await axios.get("http://localhost:4000/user/logout");
-        await getIsAdmin()
-        await getLoggedIn();
-        navigate("/")
-    }
-  
-    return (
+    await axios.get(`/user/logout`);
+    await getIsAdmin()
+    await getLoggedIn();
+    navigate("/")
+  }
+
+  return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Card.Header className="bg-dark text-white">
         <h5 className="mb-0">The Kitchenette</h5>
@@ -42,8 +42,8 @@ const NavbarHeader = () => {
                   <Nav.Link as={Link} to="/admin">Admin</Nav.Link>
                 )}
                 <Nav.Link onClick={logout}>
-                            Log Out
-                        </Nav.Link  >
+                  Log Out
+                </Nav.Link  >
               </>
             )}
           </Nav>

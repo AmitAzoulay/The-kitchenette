@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kitchenette-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kitchenette-server
+  template:
+    metadata:
+      labels:
+        app: kitchenette-server
+    spec:
+      containers:
+        - name: kitchenette-server
+          image: amitazoulay1611/the-kitchenette-server:latest
+          ports:
+            - containerPort: 4000
+          env:
+          - name: MONGO_URL
+            value: mongodb+srv://amitazoulay1611:SU6sZpTEJ8cmGZB8@cluster0.rarblbz.mongodb.net/kitchenette
+          - name: REACT_APP_KHASH
+            value: $2b$10$tf99h3B3lhG7j61R0CYHee"
+          - name: REACT_APP_ZHASH
+            value: tf99h3B3lhG7j61R0CYHee
+          - name: REACT_APP_REACT_URL
+            value: http://localhost:3000
+          - name: REACT_APP_JWT_SECRET
+            value: U!n&JJ&iPC-Uwq8zyTu@J*acc!BG$3Ie@S0lvoUa8ye0Syxdro
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kitchenette-server-service
+spec:
+  selector:
+    app: kitchenette-server
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 4000

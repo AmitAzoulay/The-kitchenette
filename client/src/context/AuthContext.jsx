@@ -8,23 +8,23 @@ const AuthContextProvider = (props) => {
 
     async function getLoggedIn(props) {
         try {
-            const loggedInRes = await axios.get("http://localhost:4000/user/loggedIn",{withCredentials: true})
+            const loggedInRes = await axios.get(`/user/loggedIn`, { withCredentials: true })
             setLoggedIn(loggedInRes.data)
-        } catch(err) {
+        } catch (err) {
             console.log("Internal error, serve might be down")
         }
-        
+
     }
 
     useEffect(() => {
         getLoggedIn()
-    },[])
+    }, [])
     return (
-        <AuthContext.Provider value={{loggedIn,getLoggedIn}}>
+        <AuthContext.Provider value={{ loggedIn, getLoggedIn }}>
             {props.children}
         </AuthContext.Provider>
     )
 }
 
 export default AuthContext
-export {AuthContextProvider}
+export { AuthContextProvider }
